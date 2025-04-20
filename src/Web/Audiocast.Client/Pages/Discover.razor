@@ -1,20 +1,16 @@
-@page "/"
-@inject IFeedClient Feed
+﻿@page "/"
 
 <PageTitle>Auidocast | Discover</PageTitle>
+<SectionContent SectionName="page-header">Discover</SectionContent>
+<SectionContent SectionName="page-header-action">
+    <button type="button" class="border-transparent inline-flex items-center gap-x-2 rounded-full border p-2 text-sm font-medium text-gray-800 transition-all hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 active:scale-95 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+        <svg class="lucide lucide-search-icon lucide-search" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+        </svg>
+    </button>
+</SectionContent>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-@code
-{
-    protected override async Task OnInitializedAsync()
-    {
-        using var response = await Feed.GetTrendingsAsync();      
-        if (!response.IsSuccessful)
-        {
-            return;
-        }
-    }
-}
+<div class="space-y-4 p-4">
+    <TrendingsView />
+</div>

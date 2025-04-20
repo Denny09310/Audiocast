@@ -7,19 +7,19 @@ namespace Audiocast.Shared.Models.Responses;
 public class TrendingResponse
 {
     [JsonPropertyName("status")]
-    public bool Status { get; set; }
+    public string Status { get; set; }
 
     [JsonPropertyName("feeds")]
-    public Trending[] Trendings { get; set; }
+    public List<Trending> Trendings { get; set; }
 
     [JsonPropertyName("count")]
     public long Count { get; set; }
 
     [JsonPropertyName("max")]
-    public long Max { get; set; }
+    public long? Max { get; set; }
 
     [JsonPropertyName("since")]
-    public long Since { get; set; }
+    public long? Since { get; set; }
 
     [JsonPropertyName("description")]
     public string Description { get; set; }

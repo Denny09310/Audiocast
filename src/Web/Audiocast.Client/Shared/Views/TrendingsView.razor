@@ -1,0 +1,70 @@
+@namespace Audiocast.Client.Shared
+@inject IFeedClient Feed
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <ErrorView Message="@error" />
+}
+else if (trendings is null)
+{
+    @* show 5 skeleton cards while loading *@
+    @for (int i = 0; i < 5; i++)
+    {
+        <div class="flex animate-pulse items-center gap-x-2 rounded-xl border border-neutral-200 bg-white p-2 shadow dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
+            <!-- image placeholder -->
+            <div class="h-16 w-16 rounded-lg bg-neutral-200 dark:bg-neutral-700"></div>
+
+            <!-- text placeholders -->
+            <div class="min-w-0 flex-1 space-y-2 py-1">
+                <div class="h-2 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+                <div class="h-4 w-3/4 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+                <div class="h-2 w-1/4 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    @foreach (var trending in trendings)
+    {
+        <div class="flex items-center gap-x-2 rounded-xl border border-neutral-200 bg-white p-2 shadow dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
+            <img src="@trending.Image"
+                 alt="@trending.Title Thumbnail"
+                 class="h-16 w-16 rounded-lg" />
+
+            <div class="min-w-0 flex-1">
+                <span class="block truncate text-xs text-neutral-400">
+                    @string.Join(", ", trending.Categories.Select(x => x.Value))
+                </span>
+
+                <h3 class="truncate font-semibold">
+                    @trending.Title
+                </h3>
+
+                <p class="truncate text-xs text-neutral-500">
+                    @(DateTimeOffset
+                        .FromUnixTimeSeconds(trending.NewestItemPublishTime)
+                        .DateTime
+                        .ToShortDateString())
+                </p>
+            </div>
+        </div>
+    }
+}
+
+@code
+{
+    private string? error;
+    private List<Trending>? trendings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var response = await Feed.GetTrendingsAsync(max: 25);
+        if (!response.IsSuccessful)
+        {
+            error = response.Error.Message;
+            return;
+        }
+        trendings = response.Content.Trendings;
+    }
+}

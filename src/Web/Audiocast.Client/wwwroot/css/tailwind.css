@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@layer base {
+    html, body, #app {
+        @apply bg-white text-neutral-900 antialiased dark:bg-neutral-900 dark:text-white;
+    }
+
+    svg:where(.lucide) {
+        @apply size-4 shrink-0;
+    }
+
+    button:not(:disabled),
+    [role="button"]:not(:disabled) {
+        @apply cursor-pointer;
+    }
+}
+
+@custom-variant hover (&:hover);

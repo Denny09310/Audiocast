@@ -1,0 +1,33 @@
+@namespace Audiocast.Client.Shared
+
+<div class="mx-auto flex max-w-sm flex-col items-center rounded-2xl bg-white p-6 shadow-lg dark:bg-neutral-800">
+    <div class="mb-4 rounded-full bg-red-100 p-4 dark:bg-red-900">
+        @* Exclamation Icon *@
+        <svg class="h-8 w-8 text-red-500 dark:text-red-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+        </svg>
+    </div>
+
+    <h2 class="mb-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">@Title</h2>
+    <p class="mb-6 text-center text-neutral-600 dark:text-neutral-400">@Message</p>
+
+    @if (OnRetry.HasDelegate)
+    {
+        <button class="rounded-xl bg-blue-600 px-6 py-3 text-white shadow transition hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                @onclick="OnRetry">
+            Retry
+        </button>
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public string Title { get; set; } = "Oops! Something went wrong.";
+
+    [Parameter]
+    public string? Message { get; set; }
+
+    [Parameter]
+    public EventCallback OnRetry { get; set; }
+}

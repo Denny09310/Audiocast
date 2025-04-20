@@ -7,7 +7,7 @@ namespace Audiocast.Shared.Models;
 public class Trending
 {
     [JsonPropertyName("id")]
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     [JsonPropertyName("url")]
     public Uri Url { get; set; }
@@ -31,10 +31,10 @@ public class Trending
     public long NewestItemPublishTime { get; set; }
 
     [JsonPropertyName("itunesId")]
-    public long? ItunesId { get; set; }
+    public int? ItunesId { get; set; }
 
     [JsonPropertyName("trendScore")]
-    public long TrendScore { get; set; }
+    public int TrendScore { get; set; }
 
     [JsonPropertyName("language")]
     public string Language { get; set; }
