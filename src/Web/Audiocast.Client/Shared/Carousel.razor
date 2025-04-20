@@ -1,0 +1,45 @@
+@typeparam T
+@implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
+
+<div @ref="element" class="embla">
+    <div class="embla__container">
+        @foreach (var item in Items)
+        {
+            <div class="embla__slide">
+                @ItemTemplate(item)
+            </div>
+        }
+    </div>
+</div>
+
+@code
+{
+    [Parameter, EditorRequired]
+    public IEnumerable<T> Items { get; set; } = [];
+
+    [Parameter, EditorRequired]
+    public RenderFragment<T> ItemTemplate { get; set; } = default!;
+
+    private ElementReference element;
+    private IJSObjectReference? reference;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (reference is not null)
+        {
+            await reference.DisposeAsync();
+        }
+
+        GC.SuppressFinalize(this);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await using var module = await JSRuntime.InvokeAsync<IJSInProcessObjectReference>("import", "./Shared/Carousel.razor.js");
+            reference = await module.InvokeAsync<IJSObjectReference>("initialize", element, new { SkipSnaps = true });
+        }
+    }
+}

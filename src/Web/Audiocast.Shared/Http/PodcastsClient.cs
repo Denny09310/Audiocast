@@ -18,6 +18,10 @@ public interface IFeedClient
         return GetTrendingsInternalAsync(max, lang, since, include, exclude, ct);
     }
 
+    [Get("/feed/1.0/categories/list")]
+    public Task<IApiResponse<CategoriesResponse>> GetCategoriesAsync(
+        CancellationToken ct = default);
+
     #region Internals
 
     [Get("/feed/1.0/podcasts/trending")]

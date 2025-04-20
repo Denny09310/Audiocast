@@ -1,0 +1,49 @@
+@namespace Audiocast.Client.Shared
+@inject IFeedClient Feed
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <ErrorView Message="@error" />
+}
+else if (categories is null)
+{
+    <div class="no-scrollbar flex space-x-4 overflow-x-auto">
+        @* show 5 placeholder cards *@
+        @for (int i = 0; i < 5; i++)
+        {
+            <div class="flex flex-shrink-0 animate-pulse flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-2xs md:p-5 dark:bg-neutral-900 dark:border-neutral-700">
+                @* placeholder for category name *@
+                <div class="h-4 w-24 rounded bg-gray-200 dark:bg-neutral-700"></div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="contents">
+        <Carousel Items="categories">
+            <ItemTemplate Context="category">
+                <div class="flex flex-col rounded-xl border border-gray-200 bg-white p-2 shadow-2xs md:p-5 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
+                    <span class="truncate">@category.Name</span>
+                </div>
+            </ItemTemplate>
+        </Carousel>
+    </div>
+}
+
+@code
+{
+    private string? error;
+    private List<Category>? categories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var response = await Feed.GetCategoriesAsync();
+        if (!response.IsSuccessful)
+        {
+            error = response.Error.Message;
+            return;
+        }
+        categories = response.Content.Categories;
+    }
+}
