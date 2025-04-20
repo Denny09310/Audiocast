@@ -28,7 +28,7 @@ else
     <div class="space-y-2">
         @foreach (var trending in trendings)
         {
-            <div class="flex items-center gap-x-2 rounded-xl border border-neutral-200 bg-white p-2 shadow dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
+            <a href="podcasts/@trending.Id" class="flex items-center gap-x-2 rounded-xl border border-neutral-200 bg-white p-2 shadow dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
                 <img src="@trending.Image"
                      alt="@trending.Title Thumbnail"
                      class="h-16 w-16 rounded-lg" />
@@ -49,7 +49,7 @@ else
                             .ToShortDateString())
                     </p>
                 </div>
-            </div>
+            </a>
         }
     </div>
 }

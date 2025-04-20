@@ -6,8 +6,22 @@ namespace Audiocast.Shared.Http;
 
 public interface IFeedClient
 {
+    [Get("/feed/1.0/categories/list")]
+    public Task<IApiResponse<CategoriesResponse>> GetCategoriesAsync(
+        CancellationToken ct = default);
+
+    [Get("/feed/1.0/podcasts/byfeedid")]
+    public Task<IApiResponse<PodcastsResponse>> GetPodcastByFeedIdAsync(
+        [AliasAs("id")] long feedId,
+        CancellationToken ct = default);
+
+    [Get("/feed/1.0/podcasts/byguid")]
+    public Task<IApiResponse<PodcastsResponse>> GetPodcastByGuidAsync(
+        Guid guid,
+        CancellationToken ct = default);
+
     public Task<IApiResponse<TrendingResponse>> GetTrendingsAsync(
-       int max = 10,
+               int max = 10,
        string? lang = default,
        long? since = null,
        IEnumerable<string>? include = null,
@@ -17,10 +31,6 @@ public interface IFeedClient
         lang ??= CultureInfo.CurrentCulture.Name;
         return GetTrendingsInternalAsync(max, lang, since, include, exclude, ct);
     }
-
-    [Get("/feed/1.0/categories/list")]
-    public Task<IApiResponse<CategoriesResponse>> GetCategoriesAsync(
-        CancellationToken ct = default);
 
     #region Internals
 

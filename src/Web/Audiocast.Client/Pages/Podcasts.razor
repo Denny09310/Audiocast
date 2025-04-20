@@ -1,0 +1,62 @@
+@page "/podcasts/{id}"
+@using Audiocast.Shared.Models.Responses
+@using Refit
+@inject IFeedClient Feed
+
+<PageTitle>Audiocast | Podcast</PageTitle>
+<SectionContent SectionName="page-header">Podcast</SectionContent>
+<SectionContent SectionName="page-header-action">
+    <button type="button" class="border-transparent inline-flex items-center gap-x-2 rounded-full border p-2 text-sm font-medium text-gray-800 transition-all hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 active:scale-95 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="12" cy="5" r="1" />
+            <circle cx="12" cy="19" r="1" />
+        </svg>
+    </button>
+</SectionContent>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <ErrorView Message="@error" />
+}
+else if (podcast is null)
+{
+
+}
+else
+{
+    <h3>Podcast- @Id</h3>
+}
+
+@code
+{
+    [Parameter]
+    public string Id { get; set; } = default!;
+
+    private string? error;
+    private Podcast? podcast;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Guid.TryParse(Id, out var guid))
+        {
+            await GetPodcastAsync(() => Feed.GetPodcastByGuidAsync(guid));
+
+        }
+        else if (long.TryParse(Id, out var feedId))
+        {
+            await GetPodcastAsync(() => Feed.GetPodcastByFeedIdAsync(feedId));
+        }
+    }
+
+    private async Task GetPodcastAsync(Func<Task<IApiResponse<PodcastsResponse>>> factory)
+    {
+        using var response = await factory();
+        if (!response.IsSuccessful)
+        {
+            error = response.Error.Message;
+            return;
+        }
+        podcast = response.Content.Podcast;
+    }
+}
