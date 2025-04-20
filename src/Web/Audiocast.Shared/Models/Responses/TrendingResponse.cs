@@ -1,6 +1,5 @@
 #pragma warning disable CS8618
 
-using Audiocast.Shared.Http.Json;
 using System.Text.Json.Serialization;
 
 namespace Audiocast.Shared.Models.Responses;
@@ -8,7 +7,6 @@ namespace Audiocast.Shared.Models.Responses;
 public class TrendingResponse
 {
     [JsonPropertyName("status")]
-    [JsonConverter(typeof(BoolStringConverter))]
     public bool Status { get; set; }
 
     [JsonPropertyName("feeds")]

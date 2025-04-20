@@ -1,5 +1,5 @@
 @page "/"
-@inject Shared.Http.FeedClient Feed
+@inject IFeedClient Feed
 
 <PageTitle>Home</PageTitle>
 
@@ -11,6 +11,10 @@ Welcome to your new app.
 {
     protected override async Task OnInitializedAsync()
     {
-        await Feed.GetTrendingsAsync();        
+        using var response = await Feed.GetTrendingsAsync();      
+        if (!response.IsSuccessful)
+        {
+            return;
+        }
     }
 }
