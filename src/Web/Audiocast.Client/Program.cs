@@ -1,4 +1,5 @@
 using Audiocast.Client;
+using Audiocast.Client.Services;
 using Audiocast.Shared.Http;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -20,5 +21,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddRefitClient<IFeedClient>()
     .ConfigureHttpClient(client => client.BaseAddress = new Uri("https+http://audiocast-gateway"));
+
+builder.Services.AddSingleton<TransitionManager>();
 
 await builder.Build().RunAsync();
