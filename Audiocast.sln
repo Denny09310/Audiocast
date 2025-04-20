@@ -1,0 +1,68 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{6C83A596-D32D-B35F-00DD-F0C99B673980}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{0BAAA64E-BA72-43F9-B298-AB148E85130C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audiocast.Gateway", "src\Services\Audiocast.Gateway\Audiocast.Gateway.csproj", "{5A290ECA-CEAA-419F-BAAF-4448CDB80310}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host", "Host", "{30D65B2F-F411-4DCA-9C3B-FF228AC95208}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audiocast.AppHost", "src\Host\Audiocast.AppHost\Audiocast.AppHost.csproj", "{50BC2B3F-875E-4230-A60C-A2DE59AC106A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audiocast.ServiceDefaults", "src\Host\Audiocast.ServiceDefaults\Audiocast.ServiceDefaults.csproj", "{5C994768-7F56-EEEC-3744-16AFE5D88DB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audiocast.Server", "src\Web\Audiocast.Server\Audiocast.Server.csproj", "{846FB30F-FAC5-283F-E94D-540C5DCCDA86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audiocast.Client", "src\Web\Audiocast.Client\Audiocast.Client.csproj", "{437B09B8-48FD-3BAF-A7D0-421FC3DE0B3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audiocast.Shared", "src\Web\Audiocast.Shared\Audiocast.Shared.csproj", "{5D2731F1-6B96-43B2-8A6C-F1DEEAB9D713}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A290ECA-CEAA-419F-BAAF-4448CDB80310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A290ECA-CEAA-419F-BAAF-4448CDB80310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A290ECA-CEAA-419F-BAAF-4448CDB80310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A290ECA-CEAA-419F-BAAF-4448CDB80310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50BC2B3F-875E-4230-A60C-A2DE59AC106A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50BC2B3F-875E-4230-A60C-A2DE59AC106A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50BC2B3F-875E-4230-A60C-A2DE59AC106A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50BC2B3F-875E-4230-A60C-A2DE59AC106A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C994768-7F56-EEEC-3744-16AFE5D88DB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C994768-7F56-EEEC-3744-16AFE5D88DB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C994768-7F56-EEEC-3744-16AFE5D88DB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C994768-7F56-EEEC-3744-16AFE5D88DB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{846FB30F-FAC5-283F-E94D-540C5DCCDA86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{846FB30F-FAC5-283F-E94D-540C5DCCDA86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{846FB30F-FAC5-283F-E94D-540C5DCCDA86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{846FB30F-FAC5-283F-E94D-540C5DCCDA86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{437B09B8-48FD-3BAF-A7D0-421FC3DE0B3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{437B09B8-48FD-3BAF-A7D0-421FC3DE0B3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{437B09B8-48FD-3BAF-A7D0-421FC3DE0B3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{437B09B8-48FD-3BAF-A7D0-421FC3DE0B3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D2731F1-6B96-43B2-8A6C-F1DEEAB9D713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D2731F1-6B96-43B2-8A6C-F1DEEAB9D713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D2731F1-6B96-43B2-8A6C-F1DEEAB9D713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D2731F1-6B96-43B2-8A6C-F1DEEAB9D713}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5A290ECA-CEAA-419F-BAAF-4448CDB80310} = {6C83A596-D32D-B35F-00DD-F0C99B673980}
+		{50BC2B3F-875E-4230-A60C-A2DE59AC106A} = {30D65B2F-F411-4DCA-9C3B-FF228AC95208}
+		{5C994768-7F56-EEEC-3744-16AFE5D88DB0} = {30D65B2F-F411-4DCA-9C3B-FF228AC95208}
+		{846FB30F-FAC5-283F-E94D-540C5DCCDA86} = {0BAAA64E-BA72-43F9-B298-AB148E85130C}
+		{437B09B8-48FD-3BAF-A7D0-421FC3DE0B3D} = {0BAAA64E-BA72-43F9-B298-AB148E85130C}
+		{5D2731F1-6B96-43B2-8A6C-F1DEEAB9D713} = {0BAAA64E-BA72-43F9-B298-AB148E85130C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {419502BB-713D-490A-9B4D-D7EA57DD228D}
+	EndGlobalSection
+EndGlobal
