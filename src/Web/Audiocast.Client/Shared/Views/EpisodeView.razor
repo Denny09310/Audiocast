@@ -1,0 +1,78 @@
+@namespace Audiocast.Client.Shared
+@inject IFeedClient Feed
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <ErrorView Message="@error" />
+}
+else if (episodes is null)
+{
+    @* — Loading Skeleton for Episodes — *@
+    <div class="space-y-4 px-4 py-6">
+        @for (var i = 0; i < 5; i++)
+        {
+            <div class="flex animate-pulse items-center space-x-4">
+                <!-- image placeholder -->
+                <div class="h-12 w-12 flex-shrink-0 rounded-lg bg-neutral-200 dark:bg-neutral-700"></div>
+
+                <!-- text placeholders -->
+                <div class="flex-1 space-y-2">
+                    <div class="h-4 w-3/4 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+                    <div class="h-3 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+                </div>
+
+                <!-- arrow icon placeholder -->
+                <div class="h-5 w-5 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    @* — Actual Episodes List — *@
+    @foreach (var episode in episodes)
+    {
+        <a href="/episodes/@episode.Id" class="block rounded-xl border border-neutral-200 bg-white p-4 transition-shadow hover:shadow dark:bg-neutral-900 dark:border-neutral-700 dark:hover:shadow-neutral-700/50">
+            <div class="flex items-center gap-x-4">
+                <!-- Episode thumbnail -->
+                <img src="@episode.Image"
+                     alt="@episode.Title thumbnail"
+                     class="size-12 shrink-0 rounded-lg object-cover"
+                     loading="lazy" />
+
+                <div class="min-w-0 flex-1 space-y-1">
+                    <h5 class="truncate font-medium text-gray-900 dark:text-gray-100">
+                        @episode.Title
+                    </h5>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                        @episode.DatePublished.ToString("g") • @episode.Duration
+                    </p>
+                </div>
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </div>
+        </a>
+    }
+}
+
+@code
+{
+    [Parameter, EditorRequired]
+    public Podcast Podcast { get; set; } = default!;
+
+    private string? error;
+    private List<Episode>? episodes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var response = await Feed.GetEpisodesByPodcastGuidAsync(Podcast.Guid);
+        if (!response.IsSuccessful)
+        {
+            error = response.Error.Message;
+            return;
+        }
+        episodes = response.Content.Episodes;
+    }
+}
