@@ -5,13 +5,13 @@ using System.Text.Json.Serialization;
 
 namespace Audiocast.Shared.Models.Responses;
 
-public partial class PodcastsResponse
+public partial class EpisodeResponse
 {
     [JsonPropertyName("description")]
     public string Description { get; set; }
 
-    [JsonPropertyName("feed")]
-    public Podcast Podcast { get; set; }
+    [JsonPropertyName("episode")]
+    public Episode Episode { get; set; }
 
     [JsonPropertyName("status")]
     [JsonConverter(typeof(ParseBoolConverter))]

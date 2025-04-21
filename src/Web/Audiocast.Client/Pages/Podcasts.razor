@@ -99,7 +99,7 @@ else
         }
     }
 
-    private async Task LoadPodcastAsync(Func<Task<IApiResponse<PodcastsResponse>>> factory)
+    private async Task LoadPodcastAsync(Func<Task<IApiResponse<PodcastResponse>>> factory)
     {
         using var response = await factory();
         if (!response.IsSuccessful)

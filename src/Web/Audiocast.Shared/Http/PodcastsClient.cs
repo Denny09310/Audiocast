@@ -12,18 +12,23 @@ namespace Audiocast.Shared.Http
         public Task<IApiResponse<CategoriesResponse>> GetCategoriesAsync(
             CancellationToken ct = default);
 
+        [Get("/feed/1.0/episodes/byid")]
+        public Task<IApiResponse<EpisodeResponse>> GetEpisodesByIdAsync(
+            [AliasAs("id")] long episodeId,
+            CancellationToken ct = default);
+
         [Get("/feed/1.0/episodes/bypodcastguid")]
         public Task<IApiResponse<EpisodesResponse>> GetEpisodesByPodcastGuidAsync(
             Guid guid,
             CancellationToken ct = default);
 
         [Get("/feed/1.0/podcasts/byfeedid")]
-        public Task<IApiResponse<PodcastsResponse>> GetPodcastByFeedIdAsync(
+        public Task<IApiResponse<PodcastResponse>> GetPodcastByFeedIdAsync(
             [AliasAs("id")] long feedId,
             CancellationToken ct = default);
 
         [Get("/feed/1.0/podcasts/byguid")]
-        public Task<IApiResponse<PodcastsResponse>> GetPodcastByGuidAsync(
+        public Task<IApiResponse<PodcastResponse>> GetPodcastByGuidAsync(
             Guid guid,
             CancellationToken ct = default);
 
