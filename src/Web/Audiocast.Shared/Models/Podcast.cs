@@ -4,51 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace Audiocast.Shared.Models;
 
-public partial class Destination
-{
-    [JsonPropertyName("address")]
-    public string Address { get; set; }
-
-    [JsonPropertyName("customKey")]
-    public string? CustomKey { get; set; }
-
-    [JsonPropertyName("customValue")]
-    public string? CustomValue { get; set; }
-
-    [JsonPropertyName("fee")]
-    public bool? Fee { get; set; }
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; }
-
-    [JsonPropertyName("split")]
-    public long Split { get; set; }
-
-    [JsonPropertyName("type")]
-    public string Type { get; set; }
-}
-
-public partial class Funding
-{
-    [JsonPropertyName("message")]
-    public string? Message { get; set; }
-
-    [JsonPropertyName("url")]
-    public Uri? Url { get; set; }
-}
-
-public partial class Model
-{
-    [JsonPropertyName("method")]
-    public string Method { get; set; }
-
-    [JsonPropertyName("suggested")]
-    public string? Suggested { get; set; }
-
-    [JsonPropertyName("type")]
-    public string Type { get; set; }
-}
-
 public partial class Podcast
 {
     [JsonPropertyName("artwork")]
@@ -152,15 +107,6 @@ public partial class Podcast
 
     [JsonPropertyName("value")]
     public Value Value { get; set; }
-}
-
-public partial class Value
-{
-    [JsonPropertyName("destinations")]
-    public Destination[] Destinations { get; set; }
-
-    [JsonPropertyName("model")]
-    public Model Model { get; set; }
 }
 
 #pragma warning restore CS8618

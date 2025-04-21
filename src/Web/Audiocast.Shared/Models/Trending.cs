@@ -28,7 +28,7 @@ public class Trending
     public Uri Artwork { get; set; }
 
     [JsonPropertyName("newestItemPublishTime")]
-    public long NewestItemPublishTime { get; set; }
+    public DateTimeOffset NewestItemPublishTime { get; set; }
 
     [JsonPropertyName("itunesId")]
     public int? ItunesId { get; set; }

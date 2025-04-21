@@ -43,10 +43,7 @@ else
                     </h3>
 
                     <p class="truncate text-xs text-neutral-500">
-                        @(DateTimeOffset
-                            .FromUnixTimeSeconds(trending.NewestItemPublishTime)
-                            .DateTime
-                            .ToShortDateString())
+                        @(trending.NewestItemPublishTime.ToString("d"))
                     </p>
                 </div>
             </a>
@@ -61,7 +58,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        using var response = await Feed.GetTrendingsAsync(max: 25);
+        using var response = await Feed.GetTrendingsAsync();
         if (!response.IsSuccessful)
         {
             error = response.Error.Message;

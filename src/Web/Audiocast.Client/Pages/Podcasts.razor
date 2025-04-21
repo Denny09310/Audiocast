@@ -1,13 +1,17 @@
-@page "/podcasts/{id}"
+@page "/podcasts/{Id}"
 @using Audiocast.Shared.Models.Responses
 @using Refit
 @inject IFeedClient Feed
 
 <PageTitle>Audiocast | Podcast</PageTitle>
-<SectionContent SectionName="page-header">Podcast</SectionContent>
+
+<SectionContent SectionName="page-header">Podcast Details</SectionContent>
 <SectionContent SectionName="page-header-action">
-    <button type="button" class="border-transparent inline-flex items-center gap-x-2 rounded-full border p-2 text-sm font-medium text-gray-800 transition-all hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 active:scale-95 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
+    <button type="button"
+            class="border-transparent inline-flex items-center gap-x-2 rounded-full border p-2 text-sm font-medium text-gray-800 transition-all hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 active:scale-95 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
             <circle cx="12" cy="12" r="1" />
             <circle cx="12" cy="5" r="1" />
             <circle cx="12" cy="19" r="1" />
@@ -21,11 +25,71 @@
 }
 else if (podcast is null)
 {
+    @* — Loading Skeleton — *@
+    <div class="animate-pulse space-y-6 px-4 py-6">
+        <div class="flex items-center gap-x-4">
+            <div class="h-24 w-24 rounded-lg bg-neutral-200 dark:bg-neutral-700"></div>
+            <div class="flex-1 space-y-2">
+                <div class="h-6 w-3/4 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+                <div class="h-4 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+            </div>
+        </div>
 
+        <div class="space-y-2">
+            @for (var i = 0; i < 3; i++)
+            {
+                <div class="h-4 w-full rounded bg-neutral-200 dark:bg-neutral-700"></div>
+            }
+        </div>
+
+        <h4 class="mt-8 mb-2 h-5 w-1/4 rounded bg-neutral-200 dark:bg-neutral-700"></h4>
+        <div class="space-y-4">
+            @for (var i = 0; i < 5; i++)
+            {
+                <div class="flex items-center justify-between">
+                    <div class="h-4 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+                    <div class="h-4 w-1/6 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+                </div>
+            }
+        </div>
+    </div>
 }
 else
 {
-    <h3>Podcast- @Id</h3>
+    @* — Podcast Header — *@
+    <div class="flex flex-col items-start gap-6 px-4 py-6 md:flex-row">
+        <img src="@podcast.Image"
+             alt="@podcast.Title cover"
+             class="h-24 w-24 flex-shrink-0 rounded-lg shadow-md" />
+
+        <div class="flex-1 space-y-2">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">@podcast.Title</h1>
+            <p class="text-sm text-gray-600 dark:text-gray-400">@podcast.Description</p>
+        </div>
+    </div>
+
+    @* — Episodes List — *@
+    <section class="space-y-4 px-4 pb-6">
+        <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Episodes</h4>
+
+        @foreach (var ep in episodes ?? [])
+        {
+            <a href="/episodes/@ep.Id"
+               class="block rounded-xl border border-neutral-200 bg-white p-4 transition-shadow hover:shadow dark:bg-neutral-900 dark:border-neutral-700 dark:hover:shadow-neutral-700/50">
+                <div class="flex items-center justify-between">
+                    <div class="space-y-1">
+                        <h5 class="truncate font-medium text-gray-900 dark:text-gray-100">@ep.Title</h5>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            @ep.DatePublished.ToString("g") • @ep.Duration
+                        </p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </a>
+        }
+    </section>
 }
 
 @code
@@ -35,21 +99,25 @@ else
 
     private string? error;
     private Podcast? podcast;
+    private List<Episode>? episodes;
 
     protected override async Task OnInitializedAsync()
     {
         if (Guid.TryParse(Id, out var guid))
         {
-            await GetPodcastAsync(() => Feed.GetPodcastByGuidAsync(guid));
-
+            await LoadPodcastAsync(() => Feed.GetPodcastByGuidAsync(guid));
         }
         else if (long.TryParse(Id, out var feedId))
         {
-            await GetPodcastAsync(() => Feed.GetPodcastByFeedIdAsync(feedId));
+            await LoadPodcastAsync(() => Feed.GetPodcastByFeedIdAsync(feedId));
+        }
+        else
+        {
+            error = "Invalid podcast identifier";
         }
     }
 
-    private async Task GetPodcastAsync(Func<Task<IApiResponse<PodcastsResponse>>> factory)
+    private async Task LoadPodcastAsync(Func<Task<IApiResponse<PodcastsResponse>>> factory)
     {
         using var response = await factory();
         if (!response.IsSuccessful)
@@ -58,5 +126,18 @@ else
             return;
         }
         podcast = response.Content.Podcast;
+
+        await LoadEpisodesAsync(podcast);
+    }
+
+    private async Task LoadEpisodesAsync(Podcast podcast)
+    {
+        using var response = await Feed.GetEpisodesByPodcastGuidAsync(podcast.Guid);
+        if (!response.IsSuccessful)
+        {
+            error = response.Error.Message;
+            return;
+        }
+        episodes = response.Content.Episodes;
     }
 }
