@@ -1,5 +1,6 @@
 #pragma warning disable CS8618
 
+using Audiocast.Shared.Http.Json;
 using System.Text.Json.Serialization;
 
 namespace Audiocast.Shared.Models.Responses;
@@ -7,6 +8,7 @@ namespace Audiocast.Shared.Models.Responses;
 public partial class EpisodesResponse
 {
     [JsonPropertyName("status")]
+    [JsonConverter(typeof(ParseBoolConverter))]
     public bool Status { get; set; }
 
     [JsonPropertyName("items")]

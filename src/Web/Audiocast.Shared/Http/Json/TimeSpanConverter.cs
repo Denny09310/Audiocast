@@ -20,8 +20,8 @@ public class TimeSpanConverter : JsonConverter<TimeSpan>
         }
         if (reader.TokenType == JsonTokenType.Number)
         {
-            long ticks = reader.GetInt64();
-            return TimeSpan.FromTicks(ticks);
+            long seconds = reader.GetInt64();
+            return TimeSpan.FromSeconds(seconds);
         }
         throw new JsonException($"Unexpected token parsing TimeSpan. Expected String or Number, got {reader.TokenType}.");
     }

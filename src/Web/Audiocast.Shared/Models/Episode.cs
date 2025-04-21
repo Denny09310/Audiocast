@@ -43,13 +43,13 @@ public partial class Episode
     public TimeSpan? Duration { get; set; }
 
     [JsonPropertyName("explicit")]
-    public long Explicit { get; set; }
+    public int Explicit { get; set; }
 
     [JsonPropertyName("episode")]
     public int? Number { get; set; }
 
     [JsonPropertyName("episodeType")]
-    public string EpisodeType { get; set; }
+    public string? Type { get; set; }
 
     [JsonPropertyName("season")]
     public int? Season { get; set; }
@@ -88,22 +88,22 @@ public partial class Episode
     public Uri? TranscriptUrl { get; set; }
 
     [JsonPropertyName("transcripts")]
-    public Transcript[] Transcripts { get; set; }
+    public Transcript[]? Transcripts { get; set; }
 
     [JsonPropertyName("soundbite")]
-    public Soundbite Soundbite { get; set; }
+    public Soundbite? Soundbite { get; set; }
 
     [JsonPropertyName("soundbites")]
-    public Soundbite[] Soundbites { get; set; }
+    public Soundbite[]? Soundbites { get; set; }
 
     [JsonPropertyName("persons")]
-    public Person[] Persons { get; set; }
+    public Person[]? Persons { get; set; }
 
     [JsonPropertyName("socialInteract")]
-    public SocialInteract[] SocialInteract { get; set; }
+    public SocialInteract[]? SocialInteract { get; set; }
 
     [JsonPropertyName("value")]
-    public Value Value { get; set; }
+    public Value? Value { get; set; }
 }
 
 #pragma warning restore CS8618
