@@ -4,6 +4,7 @@
   "containerImageTags": [
     "latest"
   ],
+  "runtimeIdentifier": "linux-arm64",
   "containerBuilder": "docker",
   "outputFormat": "compose",
   "privateRegistryEmail": "aspir8@aka.ms",
