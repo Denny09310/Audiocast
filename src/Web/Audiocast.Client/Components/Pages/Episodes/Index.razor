@@ -1,16 +1,17 @@
-﻿@page "/episodes/{Id:long}"
+@page "/episodes/{Id:long}"
 @using Audiocast.Shared.Models.Responses
 @inject IFeedClient Feed
+@inject AudioService AudioService
 
 <PageTitle>Audiocast | Now Playing</PageTitle>
 
 <SectionContent SectionName="page-header">Now Playing</SectionContent>
 <SectionContent SectionName="page-header-action">
     <button type="button"
-            class="border-transparent inline-flex items-center gap-x-2 rounded-full border p-2 text-sm font-medium text-neutral-800 transition-all hover:bg-neutral-100 focus:outline-hidden focus:bg-neutral-100 active:scale-95 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+    class="border-transparent inline-flex items-center gap-x-2 rounded-full border p-2 text-sm font-medium text-neutral-800 transition-all hover:bg-neutral-100 focus:outline-hidden focus:bg-neutral-100 active:scale-95 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-             class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
             <circle cx="12" cy="12" r="1" />
             <circle cx="12" cy="5" r="1" />
             <circle cx="12" cy="19" r="1" />
@@ -69,7 +70,6 @@ else
             <div class="absolute right-0 -bottom-6 left-0 flex justify-center gap-x-4">
                 <div class="flex items-center gap-x-4 rounded-full bg-neutral-900/10 px-4 py-2 backdrop-blur-sm">
                     <button type="button" class="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                        @* share *@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-neutral-800 dark:text-white">
                             <circle cx="18" cy="5" r="3" />
                             <circle cx="6" cy="12" r="3" />
@@ -77,20 +77,21 @@ else
                             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
                             <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                         </svg>
+                        <span class="sr-only">Share</span>
                     </button>
                     <button type="button" class="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                        @* favorite *@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-neutral-800 dark:text-white">
                             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                         </svg>
+                        <span class="sr-only">Favourite</span>
                     </button>
                     <button type="button" class="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                        @* download *@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-neutral-800 dark:text-white">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" y1="15" x2="12" y2="3" />
                         </svg>
+                        <span class="sr-only">Download</span>
                     </button>
                 </div>
             </div>
@@ -104,54 +105,7 @@ else
             </p>
         </div>
 
-        <div class="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 bg-white px-4 py-3 dark:bg-neutral-900 dark:border-neutral-700">
-            @* Progress slider *@
-            <div class="mb-3 flex items-center gap-x-4">
-                <span class="text-sm text-neutral-500 dark:text-neutral-400">0:00</span>
-                <input type="range" min="0" max="100" value="50" class="h-2 w-full appearance-none rounded-lg bg-neutral-200 dark:bg-neutral-700" />
-                <span class="text-sm text-neutral-500 dark:text-neutral-400">@episode.Duration</span>
-            </div>
-
-            @* Playback controls *@
-            <div class="flex items-center justify-evenly">
-                <button type="button" class="rounded-full p-3 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="text-neutral-800 dark:text-white">
-                        <path d="m18 14 4 4-4 4" />
-                        <path d="m18 2 4 4-4 4" />
-                        <path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" />
-                        <path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" />
-                        <path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" />
-                    </svg>
-                </button>
-                <button type="button" class="rounded-full p-3 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="text-neutral-800 dark:text-white">
-                        <polygon points="19 20 9 12 19 4 19 20" />
-                        <line x1="5" y1="19" x2="5" y2="5" />
-                    </svg>
-                </button>
-                <button type="button" class="rounded-full bg-neutral-800 p-5 text-white hover:bg-neutral-900 dark:bg-white dark:text-neutral-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="6 3 20 12 6 21 6 3" />
-                    </svg>
-                </button>
-                <button type="button" class="rounded-full p-3 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         class="text-neutral-800 dark:text-white">
-                        <polygon points="5 4 15 12 5 20 5 4" />
-                        <line x1="19" y1="5" x2="19" y2="19" />
-                    </svg>
-                </button>
-                <button type="button" class="rounded-full p-3 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                    <span class="text-sm font-medium text-neutral-800 dark:text-white">1.0x</span>
-                </button>
-            </div>
-        </div>
+        <PlaybackControls Class="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 bg-white px-4 py-3 dark:bg-neutral-900 dark:border-neutral-700" />
     </div>
 }
 
@@ -173,5 +127,6 @@ else
         }
 
         episode = resp.Content.Episode;
+        AudioService.Play(episode);
     }
 }

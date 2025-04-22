@@ -19,5 +19,6 @@ builder.Services.ConfigureHttpClientDefaults(http =>
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 builder.Services.AddSingleton<TransitionManager>();
+builder.Services.AddSingleton<AudioService>();
 
 await builder.Build().RunAsync();

@@ -1,0 +1,95 @@
+@inject IJSRuntime JSRuntime
+@inject AudioService AudioService
+@implements IAsyncDisposable
+
+<audio @ref="element" src="@url" @oncustomtimeupdate="OnTimeUpdate" />
+
+@code
+{
+    private ElementReference element;
+    private IJSObjectReference? reference;
+
+    private string? url;
+
+    public async ValueTask DisposeAsync()
+    {
+        AudioService.EpisodeChanged -= OnEpisodeChanged;
+        AudioService.IsPlayingChanged -= IsPlayingChanged;
+        AudioService.SeekInvoked += OnSeekInvoked;
+
+        if (reference is not null)
+        {
+            await reference.InvokeVoidAsync("dispose");
+            await reference.DisposeAsync();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await using var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/Shared/Audio.razor.js");
+            reference = await module.InvokeAsync<IJSObjectReference>("initialize", element);
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        AudioService.EpisodeChanged += OnEpisodeChanged;
+        AudioService.IsPlayingChanged += IsPlayingChanged;
+        AudioService.SeekInvoked += OnSeekInvoked;
+    }
+
+    private async Task PlayAsync()
+    {
+        await reference!.InvokeVoidAsync("play");
+    }
+
+    private async Task PauseAsync()
+    {
+        await reference!.InvokeVoidAsync("pause");
+    }
+
+    private async Task SeekTime(double time)
+    {
+        await reference!.InvokeVoidAsync("seekTime", time);
+    }
+
+    private async Task SetVolumeAsync(double volume)
+    {
+        await reference!.InvokeVoidAsync("setVolume", volume);
+    }
+
+    private void OnTimeUpdate(TimeUpdateEventArgs args)
+    {
+        AudioService.CurrentTime = args.CurrentTime;
+    }
+
+    private async void OnEpisodeChanged(Episode? episode)
+    {
+        if (episode?.EnclosureUrl.AbsoluteUri == url)
+        {
+            return;
+        }
+
+        url = episode?.EnclosureUrl.AbsoluteUri;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void IsPlayingChanged(bool isPlaying)
+    {
+        if (isPlaying)
+        {
+            await PlayAsync();
+        }
+        else
+        {
+            await PauseAsync();
+        }
+    }
+
+    private async void OnSeekInvoked(double time)
+    {
+        await SeekTime(time);
+    }
+}
