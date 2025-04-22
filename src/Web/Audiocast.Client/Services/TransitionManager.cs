@@ -4,60 +4,52 @@ namespace Audiocast.Client.Services;
 
 public class TransitionManager(IJSRuntime runtime) : IAsyncDisposable
 {
-    private readonly Lazy<ValueTask<IJSObjectReference>> _module = new(
-        () => runtime.InvokeAsync<IJSObjectReference>("import", "./scripts/transition-manager.js"));
+    private IJSObjectReference? _module, _resolver;
 
-    private IJSObjectReference? _resolver;
-
-    public async Task PrepareTransitionAsync()
+    public async Task BeginTransitionAsync()
     {
-        var module = await _module.Value;
-        await module.InvokeVoidAsync("prepareTransition");
+        await CancelTransitionAsync();
+        if (_module is null) await InitializeAsync();
+
+        _resolver = await _module!.InvokeAsync<IJSObjectReference>("beginTransition");
     }
+
+    public Task CancelTransitionAsync() => InvokeResolverAsync("reject");
 
     public async ValueTask DisposeAsync()
     {
-        await RejectTransitionAsync();
-
-        if (_module.IsValueCreated)
+        try
         {
-            var module = await _module.Value;
-            await module.DisposeAsync();
+            await CancelTransitionAsync();
+
+            if (_module is not null)
+            {
+                await _module.InvokeVoidAsync("dispose");
+                await _module.DisposeAsync();
+            }
+        }
+        catch (JSDisconnectedException)
+        {
+            // This exception can be ignored
         }
 
         GC.SuppressFinalize(this);
     }
 
-    public async Task EndTransitionAsync()
+    public Task EndTransitionAsync() => InvokeResolverAsync("resolve");
+
+    public async Task InitializeAsync()
     {
-        if (_resolver is null)
-        {
-            return;
-        }
-
-        await _resolver.InvokeVoidAsync("resolve");
-        await _resolver.DisposeAsync();
-
-        _resolver = null;
+        await using var module = await runtime.InvokeAsync<IJSObjectReference>("import", "./lib/transition-manager.js");
+        _module = await module.InvokeAsync<IJSObjectReference>("initialize");
     }
 
-    public async Task StartTransitionAsync()
+    private async Task InvokeResolverAsync(string identifier)
     {
-        await RejectTransitionAsync();
-        var module = await _module.Value;
-        _resolver = await module.InvokeAsync<IJSObjectReference>("startTransition");
-    }
+        var resolver = Interlocked.Exchange(ref _resolver, null);
+        if (resolver is null) return;
 
-    private async Task RejectTransitionAsync()
-    {
-        if (_resolver is null)
-        {
-            return;
-        }
-
-        await _resolver.InvokeVoidAsync("reject");
-        await _resolver.DisposeAsync();
-
-        _resolver = null;
+        await resolver.InvokeVoidAsync(identifier);
+        await resolver.DisposeAsync();
     }
 }

@@ -1,0 +1,14 @@
+{
+  "version": "3.0",
+  "defaultProvider": "jsdelivr",
+  "libraries": [
+    {
+      "library": "@virtualstate/navigation@1.0.1-alpha.209",
+      "destination": "wwwroot/lib/virtualstate/navigation/",
+      "files": [
+        "esnext/**/*.js",
+        "!esnext/**/*.min.js"
+      ]
+    }
+  ]
+}

@@ -4,16 +4,16 @@
 @inject TransitionManager TransitionManager
 @implements IAsyncDisposable
 
-<DynamicComponent Type="@RouterType" Parameters="@parameters" />
+<DynamicComponent Type="@Router" Parameters="@Parameters" />
 
 @code
 {
     /// <summary>
-    /// Gets or sets the type of router component to use. The default is the type of <see cref="Router"/>.
+    /// Gets or sets the type of router component to use. The default is the type of <see cref="Microsoft.AspNetCore.Components.Routing.Router"/>.
     /// </summary>
     [Parameter]
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
-    public Type RouterType { get; set; } = typeof(Router);
+    public Type Router { get; set; } = typeof(Router);
 
     /// <summary>
     /// Gets or sets the assembly that should be searched for components matching the URI.
@@ -25,7 +25,7 @@
     /// Gets or sets a collection of additional assemblies that should be searched for components
     /// that can match URIs.
     /// </summary>
-    [Parameter] public IEnumerable<Assembly> AdditionalAssemblies { get; set; } = Enumerable.Empty<Assembly>();
+    [Parameter] public IEnumerable<Assembly> AdditionalAssemblies { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the content to display when no match is found for the requested route.
@@ -49,49 +49,41 @@
     /// </summary>
     [Parameter] public EventCallback<NavigationContext> OnNavigateAsync { get; set; }
 
-    private Dictionary<string, object?> parameters = new();
-
     private bool rendered;
-    private IDisposable? disposable;
 
-    protected override void OnParametersSet()
-    {
-        parameters = new()
-        {
-            [nameof(Router.AppAssembly)] = AppAssembly,
-            [nameof(Router.AdditionalAssemblies)] = AdditionalAssemblies,
-            [nameof(Router.NotFound)] = NotFound,
-            [nameof(Router.Found)] = Found,
-            [nameof(Router.OnNavigateAsync)] = Navigating,
-            [nameof(Router.OnNavigateAsync)] = EventCallback.Factory.Create<NavigationContext>(this, OnNavigateAsyncInternal),
-        };
-    }
+    private Dictionary<string, object?> Parameters { get; set; } = [];
 
-    protected override void OnInitialized()
+    public async ValueTask DisposeAsync()
     {
-        disposable = NavigationManager.RegisterLocationChangingHandler(OnNavigatingAsync);
+        await TransitionManager.DisposeAsync();
+        GC.SuppressFinalize(this);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender) rendered = true;
+        if (firstRender)
+        {
+            rendered = true;
+            await TransitionManager.InitializeAsync();
+            return;
+        }
+
         await TransitionManager.EndTransitionAsync();
     }
 
-    public async ValueTask DisposeAsync()
-    {
-        disposable?.Dispose();
-        await TransitionManager.DisposeAsync();
-    }
+    protected override void OnParametersSet() => Parameters = new()
+        {
+            [nameof(AppAssembly)] = AppAssembly,
+            [nameof(AdditionalAssemblies)] = AdditionalAssemblies,
+            [nameof(NotFound)] = NotFound,
+            [nameof(Found)] = Found,
+            [nameof(Navigating)] = Navigating,
+            [nameof(OnNavigateAsync)] = EventCallback.Factory.Create<NavigationContext>(this, OnNavigateAsyncInternal),
+        };
 
     private async Task OnNavigateAsyncInternal(NavigationContext context)
     {
-        if (rendered) await TransitionManager.StartTransitionAsync();
+        if (rendered) await TransitionManager.BeginTransitionAsync();
         await OnNavigateAsync.InvokeAsync(context);
-    }
-
-    private async ValueTask OnNavigatingAsync(LocationChangingContext context)
-    {
-        if (rendered) await TransitionManager.PrepareTransitionAsync();
     }
 }
