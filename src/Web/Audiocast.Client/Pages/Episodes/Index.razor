@@ -104,53 +104,53 @@ else
             </p>
         </div>
 
-        @* Progress slider *@
-        <div class="flex items-center gap-x-4">
-            <span class="text-sm text-neutral-500 dark:text-neutral-400">0:00</span>
-            <input type="range" min="0" max="100" value="50" class="w-full appearance-none rounded-lg bg-neutral-200 dark:bg-neutral-700" />
-            <span class="text-sm text-neutral-500 dark:text-neutral-400">@episode.Duration</span>
-        </div>
+        <div class="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 bg-white px-4 py-3 dark:bg-neutral-900 dark:border-neutral-700">
+            @* Progress slider *@
+            <div class="mb-3 flex items-center gap-x-4">
+                <span class="text-sm text-neutral-500 dark:text-neutral-400">0:00</span>
+                <input type="range" min="0" max="100" value="50" class="h-2 w-full appearance-none rounded-lg bg-neutral-200 dark:bg-neutral-700" />
+                <span class="text-sm text-neutral-500 dark:text-neutral-400">@episode.Duration</span>
+            </div>
 
-        @* Playback controls *@
-        <div class="flex items-center justify-evenly">
-            <button type="button" class="rounded-full p-4 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                     class="text-neutral-800 dark:text-white">
-                    <path d="m18 14 4 4-4 4" />
-                    <path d="m18 2 4 4-4 4" />
-                    <path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" />
-                    <path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" />
-                    <path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" />
-                </svg>
-                <span class="sr-only">Shuffle</span>
-            </button>
-            <button type="button" class="rounded-full p-4 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                     class="text-neutral-800 dark:text-white">
-                    <polygon points="19 20 9 12 19 4 19 20" />
-                    <line x1="5" y1="19" x2="5" y2="5" />
-                </svg>
-                <span class="sr-only">Previous</span>
-            </button>
-            <button type="button" class="rounded-full bg-neutral-800 p-6 text-white hover:bg-neutral-900 dark:bg-white dark:text-neutral-800">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="6 3 20 12 6 21 6 3" />
-                </svg>
-                <span class="sr-only">Play</span>
-            </button>
-            <button type="button" class="rounded-full p-4 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-neutral-800 dark:text-white">
-                    <polygon points="5 4 15 12 5 20 5 4" />
-                    <line x1="19" y1="5" x2="19" y2="19" />
-                </svg>
-                <span class="sr-only">Next</span>
-            </button>
-            <button type="button" class="rounded-full p-4 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-                <span class="text-sm font-medium text-neutral-800 dark:text-white">1.0x</span>
-            </button>
+            @* Playback controls *@
+            <div class="flex items-center justify-evenly">
+                <button type="button" class="rounded-full p-3 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="text-neutral-800 dark:text-white">
+                        <path d="m18 14 4 4-4 4" />
+                        <path d="m18 2 4 4-4 4" />
+                        <path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" />
+                        <path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" />
+                        <path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" />
+                    </svg>
+                </button>
+                <button type="button" class="rounded-full p-3 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="text-neutral-800 dark:text-white">
+                        <polygon points="19 20 9 12 19 4 19 20" />
+                        <line x1="5" y1="19" x2="5" y2="5" />
+                    </svg>
+                </button>
+                <button type="button" class="rounded-full bg-neutral-800 p-5 text-white hover:bg-neutral-900 dark:bg-white dark:text-neutral-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="6 3 20 12 6 21 6 3" />
+                    </svg>
+                </button>
+                <button type="button" class="rounded-full p-3 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="text-neutral-800 dark:text-white">
+                        <polygon points="5 4 15 12 5 20 5 4" />
+                        <line x1="19" y1="5" x2="19" y2="19" />
+                    </svg>
+                </button>
+                <button type="button" class="rounded-full p-3 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                    <span class="text-sm font-medium text-neutral-800 dark:text-white">1.0x</span>
+                </button>
+            </div>
         </div>
     </div>
 }
@@ -161,7 +161,7 @@ else
     public long Id { get; set; }
 
     private string? error;
-    private Audiocast.Shared.Models.Episode? episode;
+    private Episode? episode;
 
     protected override async Task OnInitializedAsync()
     {
