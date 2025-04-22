@@ -1,4 +1,4 @@
-using Audiocast.Client;
+using Audiocast.Client.Components;
 using Audiocast.Client.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
